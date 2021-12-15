@@ -46,6 +46,34 @@ def get_rates(data):
     return gamma, epsilon
 
 
+def get_ratings(data, pos=0, type="oxygen"):
+    if len(data) == 1:
+        return data[0]
+
+    ones = []
+    zeros = []
+    for entry in data:
+        if entry[pos] == "1":
+            ones.append(entry)
+        else:
+            zeros.append(entry)
+
+    if type == "oxygen":
+        if len(ones) == len(zeros):
+            return get_ratings(ones, pos + 1, type)
+        elif len(ones) > len(zeros):
+            return get_ratings(ones, pos + 1, type)
+        else:
+            return get_ratings(zeros, pos + 1, type)
+    else:
+        if len(ones) == len(zeros):
+            return get_ratings(zeros, pos + 1, type)
+        elif len(ones) > len(zeros):
+            return get_ratings(zeros, pos + 1, type)
+        else:
+            return get_ratings(ones, pos + 1, type)
+
+
 if __name__ == "__main__":
     try:
         data = load_data(sys.argv[1])
@@ -53,8 +81,17 @@ if __name__ == "__main__":
         print("Please specify data file as your first argument")
         exit()
 
+    print("-------------------------------------")
     gamma, epsilon = get_rates(data)
 
     print(gamma, epsilon)
     print(int(gamma, 2), int(epsilon, 2))
     print(int(gamma, 2) * int(epsilon, 2))
+
+    print("-------------------------------------")
+    oxygen_rating = get_ratings(data, type="oxygen")
+    co2_rating = get_ratings(data, type="co2")
+
+    print(oxygen_rating, co2_rating)
+    print(int(oxygen_rating, 2), int(co2_rating, 2))
+    print(int(oxygen_rating, 2) * int(co2_rating, 2))
