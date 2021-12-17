@@ -1,3 +1,6 @@
+import copy
+
+
 def load_data(filename):
     with open(filename, "r") as f:
         sequece = f.readline().strip().split(",")
@@ -39,15 +42,6 @@ def check_win(board, board_size=5):
     return False
 
 
-def play(boards, sequence):
-    for num in sequence:
-        for board in boards:
-            mark_board(board, num)
-            if check_win(board):
-                return get_score(board, num)
-    return False
-
-
 def get_score(board, num, board_size=5):
     count = 0
     for key in board["hits"]:
@@ -57,12 +51,47 @@ def get_score(board, num, board_size=5):
                     row = int(key[4:])
                     count += int(board["board"][row][i])
 
-    print(count)
-    print(num)
+    print(f"{count} * {num} = {count * int(num)}")
     return count * int(num)
 
 
-if __name__ == "__main__":
-    sequence, data = load_data("test_input.txt")
+def play_first(data, sequence):
+    boards = copy.deepcopy(data)
+    for num in sequence:
+        for board in boards:
+            mark_board(board, num)
+            if check_win(board):
+                return get_score(board, num)
+    return False
 
-    print(play(data, sequence))
+
+def play_last(data, sequence):
+    boards = copy.deepcopy(data)
+    board_count = len(boards)
+    winners = []
+
+    for num in sequence:
+        for i in range(board_count):
+            mark_board(boards[i], num)
+            if check_win(boards[i]):
+                winners.append(i)
+
+        if winners != []:
+            if board_count == 1:
+                return get_score(boards[0], num)
+
+            winners.reverse()
+            for i in winners:
+                boards.pop(i)
+
+            board_count = len(boards)
+            winners = []
+
+        print(board_count)
+
+
+if __name__ == "__main__":
+    sequence, data = load_data("input.txt")
+
+    play_first(data, sequence)
+    play_last(data, sequence)
