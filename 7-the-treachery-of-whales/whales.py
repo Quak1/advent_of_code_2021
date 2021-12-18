@@ -7,7 +7,8 @@ def load_data(filename):
 def move_to_position(data, position):
     fuel = 0
     for entry in data:
-        fuel += abs(position - entry)
+        steps = abs(position - entry)
+        fuel += (steps ** 2 + steps) / 2
 
     return fuel
 
