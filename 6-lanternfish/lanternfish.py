@@ -16,7 +16,7 @@ def simulate_day(fish):
 
 
 if __name__ == "__main__":
-    data = load_data("test-input.txt")
+    data = load_data("input.txt")
 
     for i in range(80):
         simulate_day(data)
