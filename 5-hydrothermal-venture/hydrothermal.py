@@ -30,9 +30,9 @@ def extend_vector(vector):
 def extend_all(vectors):
     points = []
     for vector in vectors:
-        p1 = vector[0]
-        p2 = vector[1]
-        if p1[0] == p2[0] or p1[1] == p2[1]:
+        # p1 = vector[0]
+        # p2 = vector[1]
+        # if p1[0] == p2[0] or p1[1] == p2[1]:
         points.extend(extend_vector(vector))
 
     return points
